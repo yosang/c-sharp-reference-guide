@@ -16,7 +16,10 @@
   - [Null](#null)
   - [Switch](#switch)
   - [namespaces](#namespaces)
-    - [visibility/access modifiers](#visibilityaccess-modifiers)
+    - [using directive](#using-directive)
+- [Object Oriented Programming](#object-oriented-programming)
+- [class](#class)
+  - [visibility/access modifiers](#visibilityaccess-modifiers)
 
 # About
 This repo will serve as personal notes and quick reference guide for stuff that I pick up as I learn C#.
@@ -37,7 +40,7 @@ Its not meant to be a C# learn the basics, theres course material for that...
 - A C# program can use top-level statements (a series of statements).
     - In this case the program itself serves as the main entry point for the application. (C# generates a Main method automatically)
 - If a `Main` method is present, C# will use this as the entry point.
-    - A project that has top-level statements will ignore the `Main` method, with a.
+    - A project that has top-level statements will ignore the `Main` method, with a warning.
 
 # Syntax
 - C# syntax is inspired by C and C++ syntax.
@@ -59,8 +62,7 @@ Its not meant to be a C# learn the basics, theres course material for that...
         - The function member of UnitConverter are the constructor and the method `convert`.
     - Data is created when we instantiate a type.
     - The `new` operator creates an instance of a type.
-- The `public` keyword exposes members to other classes.
-    - If a member is not marked as public, it will be private and cannot be accessed from outside of the class.
+
 
 ### Conversion
 - Types can be converted to other types, as long as the types are compatible.
@@ -85,7 +87,7 @@ Its not meant to be a C# learn the basics, theres course material for that...
 - We can search with strings using indexes `str[2]`, for access only, we cant mutate a string.
     - indexOf and lastIndex of are useful, they take a `char` type.
 - Every method of a string (because its immutable) returns a new string, leaving the original one untouched.
-- To be able to mutate strings we have to access the individual `char` values.
+- Accessing `char` is read-only.
     - [StringBuilder](https://learn.microsoft.com/en-us/dotnet/api/system.text.stringbuilder?view=net-10.0) creates a buffer of char values that can be converted to strings with the `ToString()` method.
     - StringBuilder has some nice methods we can use
         - `Append` - Adds a char at the end of the buffer, it accepts among the following types `char`, `string`, `int`, `double`, `bool`, `char[]`...
@@ -113,7 +115,6 @@ Its not meant to be a C# learn the basics, theres course material for that...
     - `int[] sliced = myArr[2..];` - Slices the array from index 2 and to the end (exclusive)
     - `int[] sliced = myArr[1..2]` - Gets 2
     - `int[] sliced = myArr[..2];` - Gets 1 and 2
-    - `int[] sliced = myArr[2..];` - Gets 4 and 5
     - Like indices, we also got a `Range` type
     - `Range firstTwoItems = 0..2;`
     - `int[] sliced = myArr[firstTwoItems];` - Gets us 1 and 2
@@ -124,7 +125,7 @@ Its not meant to be a C# learn the basics, theres course material for that...
 
 ### Parameter modifiers
 - To refresh my memory, **parameters** define the set of **arguments** that has to be provided when calling a method.
-    - `fo(8)` - 8 is an arguments
+    - `foo(8)` - 8 is an arguments
     - `static void foo(int p) {...}` - p is a parameter 
 - In C#, we can control how parameters are passed with `ref`, `in`, `out` and `params`.
     - `ref` - Passes an argument by reference, the default is that arguments are passed by value (a new variable copy is created).
@@ -175,7 +176,7 @@ Its not meant to be a C# learn the basics, theres course material for that...
 ## Switch
 - classic switch
     ```c#
-        int cityNumber = 1; // Stan
+        int cityNumber = 1; // Bergen
         string cityName = cityNumber switch
         {
             0 => "Stavanger",
@@ -206,7 +207,7 @@ Its not meant to be a C# learn the basics, theres course material for that...
     ```
 - switch expressions
     ```c#
-    int cityNumber = 1; // Stan
+    int cityNumber = 1; // Bergen
     string cityName = cityNumber switch
     {
         0 => "Stavanger",
@@ -217,7 +218,98 @@ Its not meant to be a C# learn the basics, theres course material for that...
     System.Console.WriteLine(cityName); // Bergen
     ```
 ## namespaces
-...
+- Namespaces are domains where type names must be unique.
+- Types are organized into hierarchical name spaces.
+- The `WriteLine` method is a method of then namespace `System.Console`.
+- We can create namespaces with the `namespace` keyword.
+- The dots in a namespace represents the hierarchy.
+    ```c#
+    namespace Outer
+    {
+        namespace Inner
+        {
+            class Animal {}
+            class Person {}
+        }
+    }
+    ```
+- To refer to a class, we must use its namespace `Outer.Inner.Animal` to access its methods.
+- Types not defined in any namespace belong to the `global namespace`.
+- `File-scoped` namespaces is when everything in a file belongs a single namespace.
+    ```c#
+    namespace MyNameSpace; // Everything below belongs to this namespace
 
-### visibility/access modifiers
-...
+    class Animal {} // Belongs to MyNameSpace
+    class Person {}
+    ```
+- File-scoped namespaces cannot be combined with top-level statements in the same file (compiler error).
+
+### using directive
+- Imports a namespace and allows us to access everything from it once imported.
+- With `using MyNameSpace` on top of a file we can use the `Animal` class without writing out `MyNameSpace.Animal` every time.
+- 
+
+# Object Oriented Programming
+Classes are commonly used for `OOP` as they provide `Abstraction`, `Polymorphism`, `Inheritance` and `Encapsulation`.
+
+This is the heart of `C#`.
+
+- **Abstraction**: Hides unnecessary implementation details from outside of the class.
+- **Polymorphism**: Instances of a class can have the same methods, but with different behavior.
+- **Inheritance**: Allows an instance of a class to inherit attributes and methods from an existing class.
+- **Encapsulation**: Bundles methods and fields into a single unit (class). Allowing modifiers to define the access to each and one of those.
+
+# class
+- A `class` consists of attributes and modifiers and class members.
+    - attributes allow us to add metadata to classes, fields and methods.
+    - modifiers allow us to control the access of classes: `public`, `internal`, `static`...
+    - class members are such as `fields`, `methods`, `constructors`...
+- A `field` is a variable.
+    - a field can have a `readonly` modifier to prevent it from being modified after construction.
+- A `method` performs an action in a series of statements.
+    - a method can receive data from the caller by specifying `parameters` and send back data to the caller using a `return` type.
+    - a method can specify a `void` return type, meaning it wont send anything back to the caller.
+    - a method can also access its outside world by using `ref` and `out` parameters.
+- A `constructor` is simply a `method`, but named after the class name.
+    - The constructor is used to run initialization code on new instances of a class.
+    - When designing the constructor we dont give it a return type, because its purpose is to run code on initiation.
+    ```c#
+    Animal myPet = new Animal("Ella");
+
+    myPet.Bark(); // Woof
+
+    public class Animal
+    {
+        public string name; // Field
+
+        public Animal(string n) // The constructor, takes a string
+        {
+            name = n; // Assigns n to name.
+        }
+
+        public void Bark()
+        {
+            Console.WriteLine("Woof");
+        }
+    }
+    ```
+    - If we dont design a constructor on a class, the class will automatically implement a `parameterless-constructor`.
+    - if the baseclass has a parameterless constructor, the compiler inserts `: base()` automatically for subclasses.
+        - otherwise we must explicitly call `: base(..)`
+
+
+## visibility/access modifiers
+- The `public` modifier exposes class members to other classes.
+    - by default: 
+        - top-level types = `internal` (Access is limited to the current project/assembly where it is defined)
+        - members (fields, methods…) = `private`
+- The `static` allows us to use fields, methods only as part of a class itself and not an instance of it.
+    - If a class is marked `static`, it cannot be instantiated, meaning we cant create instances of it, all the members of this class must also be marked `static`. 
+    - See [example:](./class-modifiers/Program.cs)
+- The `virtual` modifier allows subclasses of a class to modify a method. This enables `polymorphism`.
+    - When overriding on a subclass, we must use the `override` modifier on it.
+    - See [example](./oop/inheritance/Program.cs)
+- The `required` modifier can reduce the need for a class constructor, but this means every class instance will require this field to be assigned.
+    - Constructors can still exist (and can be marked [SetsRequiredMembers] to satisfy the requirement)
+    - Introduced in C# 11. Useful with object initializers:` new Person { Name = "Alice" };` where Name is required.
+
