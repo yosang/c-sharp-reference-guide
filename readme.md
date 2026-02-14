@@ -313,3 +313,8 @@ This is the heart of `C#`.
     - Constructors can still exist (and can be marked [SetsRequiredMembers] to satisfy the requirement)
     - Introduced in C# 11. Useful with object initializers:` new Person { Name = "Alice" };` where Name is required.
 
+# interfaces
+...
+
+# delegates
+...
